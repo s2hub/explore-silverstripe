@@ -1,0 +1,107 @@
+# A page type: a PHP class with fields, a template, and a page of that type in the CMS.
+title: A page type of your own
+description: An Event page with a date and a template.
+order: 3
+duration: 15 min
+tags: [PHP, Template]
+image: image.webp
+
+steps:
+  - title: A new class
+    url: /admin/pages
+    create:
+      - file: app/src/EventPage.php
+        content: |
+          <?php
+
+          /**
+           * A page for an event.
+           */
+          class EventPage extends Page
+          {
+              private static $db = [
+              ];
+          }
+    open:
+      - app/src/EventPage.php
+    text: |
+      Every kind of page is a PHP class. `EventPage` extends `Page`, so it can do all a page can.
+
+      Give it a date: add a field to `$db` and save.
+
+      ```php
+      'Date' => 'Date',
+      ```
+    tasks:
+      - label: Added Date to $db
+        contains:
+          file: app/src/EventPage.php
+          pattern: "'Date'\\s*=>\\s*'Date'"
+    hint: |
+      The field goes between the square brackets of `$db`: the key is the field's name, the value its type.
+    solution:
+      files:
+        - file: app/src/EventPage.php
+          after: "private static $db = ["
+          insert: "\n        'Date' => 'Date',"
+
+  - title: Build the database
+    url: /admin/pages
+    open:
+      - app/src/EventPage.php
+    text: |
+      Run **dev/build**: Silverstripe creates a table for the event pages, with a column for the date.
+    tasks:
+      - label: Ran dev/build
+        built: true
+    hint: |
+      The output below the code lists the new table `EventPage`.
+    solution:
+      build: true
+
+  - title: An event in the CMS
+    url: /admin/pages
+    open:
+      - app/src/EventPage.php
+    text: |
+      In **Pages**, choose **Add new**: there is a page type **Event Page** now. Add one, give it a title and a date,
+      and publish it.
+    tasks:
+      - label: Added a page
+        visited: "^/admin/pages/(add|edit/show/\\d+)"
+    hint: |
+      Silverstripe made the date field from the field type `Date`: it shows a date picker.
+
+  - title: A template
+    create:
+      - file: app/templates/Layout/EventPage.ss
+        content: |
+          <div class="page__content">
+              <h1 class="page__title">$Title</h1>
+              $ElementalArea
+          </div>
+    open:
+      - app/templates/Layout/EventPage.ss
+    text: |
+      A page type gets its look from a template of the same name. Show the date below the title:
+
+      ```html
+      <p class="event__date">$Date.Nice</p>
+      ```
+
+      Save, then open your event on the site.
+    tasks:
+      - label: Added $Date to the template
+        contains:
+          file: app/templates/Layout/EventPage.ss
+          pattern: "\\$Date"
+      - label: Looked at the site
+        visited: "^/(?!admin)"
+    hint: |
+      `$Date` is the field; `.Nice` formats it. Without a template of its own, a page type uses the one of its parent
+      class, `Page`.
+    solution:
+      files:
+        - file: app/templates/Layout/EventPage.ss
+          after: "<h1 class=\"page__title\">$Title</h1>"
+          insert: "\n    <p class=\"event__date\">$Date.Nice</p>"

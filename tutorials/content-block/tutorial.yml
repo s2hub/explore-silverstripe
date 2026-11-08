@@ -1,0 +1,112 @@
+# A content block of your own with Elemental: a PHP class, a template, and the block on a page.
+title: A content block
+description: Build a block editors can drop onto any page.
+order: 4
+duration: 15 min
+tags: [PHP, Template]
+image: image.webp
+
+steps:
+  - title: A block class
+    url: /admin/pages
+    create:
+      - file: app/src/Blocks/QuoteBlock.php
+        content: |
+          <?php
+
+          use DNADesign\Elemental\Models\BaseElement;
+
+          /**
+           * A quote with its author.
+           */
+          class QuoteBlock extends BaseElement
+          {
+              private static $singular_name = 'Quote';
+
+              private static $icon = 'font-icon-chat';
+
+              private static $db = [
+                  'Quote' => 'Text',
+              ];
+
+              public function getType()
+              {
+                  return 'Quote';
+              }
+          }
+    open:
+      - app/src/Blocks/QuoteBlock.php
+      - app/src/Blocks/ContactsBlock.php
+    text: |
+      A content block is a class that extends `BaseElement`. `QuoteBlock` stores a quote; give it an author too:
+
+      ```php
+      'Author' => 'Varchar',
+      ```
+
+      Compare it with `ContactsBlock`, the block that lists contacts.
+    tasks:
+      - label: Added Author to $db
+        contains:
+          file: app/src/Blocks/QuoteBlock.php
+          pattern: "'Author'\\s*=>"
+    hint: |
+      `Text` is for longer text, `Varchar` for a line. `getType()` is the name the CMS shows for the block.
+    solution:
+      files:
+        - file: app/src/Blocks/QuoteBlock.php
+          after: "'Quote' => 'Text',"
+          insert: "\n        'Author' => 'Varchar',"
+
+  - title: Build the database
+    url: /admin/pages
+    open:
+      - app/src/Blocks/QuoteBlock.php
+    text: |
+      Run **dev/build**, so the block gets its table.
+    tasks:
+      - label: Ran dev/build
+        built: true
+    solution:
+      build: true
+
+  - title: A template
+    create:
+      - file: app/templates/QuoteBlock.ss
+        content: |
+          <blockquote class="quote">
+              <p>$Quote</p>
+          </blockquote>
+    open:
+      - app/templates/QuoteBlock.ss
+      - app/templates/ContactsBlock.ss
+    text: |
+      A block's template has the class's name. Add the author below the quote and save:
+
+      ```html
+      <% if $Author %><footer>$Author</footer><% end_if %>
+      ```
+    tasks:
+      - label: Added $Author to the template
+        contains:
+          file: app/templates/QuoteBlock.ss
+          pattern: "\\$Author"
+    solution:
+      files:
+        - file: app/templates/QuoteBlock.ss
+          after: "<p>$Quote</p>"
+          insert: "\n    <% if $Author %><footer>$Author</footer><% end_if %>"
+
+  - title: Use it
+    url: /admin/pages
+    text: |
+      Open a page in the CMS, add a block with **Add block**: **Quote** is in the list now. Fill it in, publish the
+      page and look at it on the site.
+    tasks:
+      - label: Opened a page
+        visited: "^/admin/pages/edit/show/\\d+"
+      - label: Looked at the site
+        visited: "^/(?!admin)"
+    hint: |
+      Every page has content blocks, so the new block works on all of them. `$allowed_elements` on a page type can
+      limit which blocks it takes.

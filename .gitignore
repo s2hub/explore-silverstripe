@@ -1,0 +1,4 @@
+/node_modules/
+/dist/
+# The site bundle from the playground (npm run bundle)
+/bundle/

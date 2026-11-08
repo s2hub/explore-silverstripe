@@ -1,0 +1,58 @@
+# The CMS without code: the site tree, content blocks, draft and publish.
+title: Edit a page
+description: Pages, content blocks, draft and publish. No code.
+order: 1
+duration: 5 min
+tags: [CMS]
+image: image.webp
+
+steps:
+  - title: The site tree
+    url: /admin/pages
+    text: |
+      On the right is the CMS of a real Silverstripe site. **Pages** shows the site tree: every page of the site, in
+      the order of the menu.
+
+      Click **Home** to open it.
+    tasks:
+      - label: Opened a page
+        visited: "^/admin/pages/edit/show/\\d+"
+    hint: |
+      The tree is in the column next to the CMS menu. If you see a list instead, switch to the tree with the icon
+      above it.
+
+  - title: Content blocks
+    text: |
+      A page is made of **content blocks**: text, images, lists. Click a block to open it, change its text and press
+      **Save** below the block.
+
+      Saving keeps a draft: the published site does not change yet.
+    tasks:
+      - label: Opened a page
+        visited: "^/admin/pages/edit/show/\\d+"
+    hint: |
+      The blocks are on the **Main content** tab of the page. A block opens inline; its **Save** button is below it.
+
+  - title: Draft and publish
+    text: |
+      Press **Publish** at the bottom of the page: now the change is live. Then look at the page on the site with
+      **Site** above the preview.
+    tasks:
+      - label: Looked at the site
+        visited: "^/(?!admin)"
+    hint: |
+      **Publish** publishes the page and its blocks. The CMS shows a page's state next to its title in the tree:
+      draft, modified or published.
+
+  - title: A new page
+    url: /admin/pages
+    text: |
+      Add a page: **Add new** above the tree, choose **Page** and where it goes, then give it a title and a block.
+      Publish it and find it in the site's menu.
+    tasks:
+      - label: Added a page
+        visited: "^/admin/pages/(add|edit/show/\\d+)"
+      - label: Looked at the site
+        visited: "^/(?!admin)"
+    hint: |
+      A page's place in the tree is its place in the menu. Drag pages in the tree to move them.

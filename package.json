@@ -1,0 +1,22 @@
+{
+  "name": "explore-silverstripe",
+  "private": true,
+  "description": "Explore Silverstripe: tutorials with a real Silverstripe CMS running in the browser",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 5421",
+    "bundle": "node bin/fetch-bundle.mjs"
+  },
+  "dependencies": {
+    "silverstripe-playground": "github:s2hub/silverstripe-cms-playground"
+  },
+  "devDependencies": {
+    "marked": "^18.1.3",
+    "sass-embedded": "^1.89.2",
+    "vite": "^6.4.5",
+    "yaml": "^2.9.1"
+  }
+}

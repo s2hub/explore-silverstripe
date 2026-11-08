@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Explore Silverstripe</title>
+    <meta name="description" content="Try Silverstripe CMS in your browser: a real Silverstripe 6 site runs in the tab, with tutorials. No installation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Rubik:wght@400;500;600;700&display=swap">
+  </head>
+  <!-- data-view: "home" (the start page with the tutorials) or "tutorial" (a tutorial's steps, code and site) -->
+  <body data-view="home">
+    <header class="ssp-toolbar">
+      <a class="ssp-logo" href="./" data-link="home">
+        <img src="./src/icons/logo-mark.svg" width="36" height="27" alt="">
+        <img src="./src/icons/logo-text.svg" width="147" height="16" alt="Explore Silverstripe">
+      </a>
+
+      <!-- Start page -->
+      <div class="ssp-toolbar__group ssp-toolbar__actions only-home">
+        <span id="sites-menu"></span>
+        <a class="ssp-action" href="https://www.s2-hub.com/" target="_blank" rel="noopener">s2-hub.com<img src="./src/icons/external.svg" width="15" height="15" alt="(opens in a new tab)"></a>
+        <a class="ssp-action" href="https://docs.silverstripe.org/" target="_blank" rel="noopener">Docs<img src="./src/icons/external.svg" width="15" height="15" alt="(opens in a new tab)"></a>
+      </div>
+
+      <!-- Tutorial -->
+      <div class="ssp-toolbar__group only-tutorial">
+        <strong id="tutorial-title" class="tutorial-title"></strong>
+        <ol id="tutorial-steps" class="steps" aria-label="Steps"></ol>
+      </div>
+      <span id="status" class="ssp-status only-tutorial" role="status"></span>
+      <div class="ssp-toolbar__group ssp-toolbar__actions only-tutorial">
+        <button id="reset-step" class="ssp-action" type="button" disabled title="Put the files of this step back to how they were when it started">
+          <img src="./src/icons/reset.svg" width="15" height="15" alt="">Reset step
+        </button>
+        <a class="ssp-action" href="./" data-link="home"><img src="./src/icons/tutorials.svg" width="20" height="15" alt="">All tutorials</a>
+        <button id="leave-tutorial" class="button button--primary" type="button" disabled title="Save this site in your browser and open it in the full playground">Continue in full playground</button>
+      </div>
+    </header>
+
+    <main id="home" class="home only-home">
+      <div class="home__decoration" aria-hidden="true">
+        <img class="home__circle home__circle--teal" src="./src/icons/ellipse-teal.svg" width="551" height="551" alt="">
+        <img class="home__circle home__circle--blue" src="./src/icons/ellipse-blue.svg" width="436" height="436" alt="">
+      </div>
+      <h1 class="home__title">Try Silverstripe CMS in your browser</h1>
+      <p class="home__lead">A real Silverstripe 6 site runs in this tab. Change its code, run dev/build and watch the CMS change. No installation.</p>
+      <div class="progress">
+        <div class="progress__track"><div id="progress-bar" class="progress__bar"></div></div>
+        <span id="progress-label" class="progress__label" role="status">Preparing the site…</span>
+      </div>
+      <ul id="tutorial-cards" class="cards">
+        <li class="card card--playground">
+          <img class="card__image" src="./src/images/playground.webp" width="800" height="394" alt="">
+          <div class="card__body">
+            <h2 class="card__title">Open the full playground</h2>
+            <p class="card__text">The whole site and all its code. Save it in your browser or download it as a ddev project.</p>
+            <a class="button card__button" href="./playground.html">Open playground</a>
+          </div>
+        </li>
+      </ul>
+      <footer class="footer">
+        <a class="footer__logo" href="https://www.s2-hub.com/" target="_blank" rel="noopener">
+          <img src="./src/icons/s2hub-logo.svg" width="78" height="36" alt="S2 Hub">
+        </a>
+        <p class="footer__text">&copy; S2 Hub · The European Silverstripe community</p>
+        <nav class="footer__links" aria-label="S2 Hub">
+          <a href="https://www.s2-hub.com/contact" target="_blank" rel="noopener">Contact</a>
+          <a href="https://www.s2-hub.com/imprint" target="_blank" rel="noopener">Imprint</a>
+          <a href="https://www.s2-hub.com/data-protection" target="_blank" rel="noopener">Data Protection</a>
+        </nav>
+      </footer>
+    </main>
+
+    <main id="tutorial" class="workspace only-tutorial">
+      <aside class="panel" aria-label="Tutorial">
+        <p id="step-count" class="panel__count"></p>
+        <h2 id="step-title" class="panel__title"></h2>
+        <div id="step-text" class="panel__text"></div>
+        <ul id="step-tasks" class="tasks"></ul>
+        <button id="hint-toggle" class="hint-toggle" type="button" aria-expanded="false" aria-controls="step-hint">
+          <img src="./src/icons/play.svg" width="12" height="12" alt="">Show a hint
+        </button>
+        <div id="step-hint" class="panel__text panel__hint" hidden></div>
+        <nav class="panel__nav" aria-label="Step">
+          <button id="step-back" class="button button--primary" type="button">Back</button>
+          <button id="step-solution" class="button" type="button">Show solution</button>
+          <button id="step-next" class="button button--go" type="button">Next</button>
+        </nav>
+      </aside>
+      <section id="tutorial-code" class="workspace__code" aria-label="Code"></section>
+      <div id="splitter" aria-label="Resize the code and the site"></div>
+      <section id="tutorial-preview" class="workspace__preview" aria-label="Site"></section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

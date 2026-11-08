@@ -1,0 +1,238 @@
+// The tutorial view: the step in a panel on the left, then the code and the site.
+
+.tutorial-title {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.steps {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: var(--ssp-grey);
+    color: #000;
+    font-size: 12px;
+
+    &[aria-current="step"] {
+      background: var(--ssp-blue);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    &.done:not([aria-current]) {
+      box-shadow: inset 0 0 0 2px var(--ssp-green);
+    }
+  }
+}
+
+#leave-tutorial {
+  padding: 8px 18px;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+
+  &__code {
+    width: 41%;
+    flex-shrink: 0;
+  }
+
+  &__preview {
+    flex: 1;
+  }
+}
+
+body.without-code {
+  .workspace__code,
+  .workspace .ssp-splitter {
+    display: none;
+  }
+}
+
+.panel {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  width: 272px;
+  flex-shrink: 0;
+  overflow: auto;
+  padding: 10px 16px 24px 20px;
+  border-right: 1px solid var(--ssp-border);
+  background: #fff;
+  box-shadow: 2px 0 5px rgb(0 0 0 / 25%);
+
+  &__count {
+    margin: 0 0 18px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0 0 10px;
+    color: var(--ssp-blue);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  &__text {
+    font-size: 14px;
+
+    p {
+      margin: 0 0 1em;
+    }
+
+    code {
+      color: var(--ssp-orange);
+      font-family: var(--ssp-font);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    pre {
+      overflow: auto;
+      margin: 0 0 1em;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: var(--ssp-code);
+      color: #fff;
+
+      code {
+        color: inherit;
+        font: 12px/1.5 var(--ssp-mono);
+      }
+    }
+  }
+
+  &__hint {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--ssp-blue);
+    background: #f1f4f8;
+    font-size: 13px;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 20px;
+  }
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0 10px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--ssp-border);
+    border-radius: 8px;
+
+    // An open task: an empty circle where a done one has its check.
+    &::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      margin: 1px;
+      border: 2px solid var(--ssp-border);
+      border-radius: 50%;
+    }
+
+    &.done {
+      border-color: var(--ssp-green);
+      background: var(--ssp-green);
+      color: #fff;
+
+      &::before {
+        width: 14px;
+        height: 14px;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        background: url("../icons/check-circle.svg") no-repeat center / 14px 14px;
+      }
+    }
+  }
+}
+
+.hint-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 35px;
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--ssp-blue);
+  color: #fff;
+  text-align: left;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .ssp-status {
+    order: 10;
+    flex-basis: 100%;
+  }
+
+  .workspace {
+    flex-direction: column;
+    overflow: auto;
+
+    &__code {
+      width: auto !important;
+      height: 55vh;
+      flex: none !important;
+    }
+
+    &__preview {
+      flex: none;
+      height: 80vh;
+    }
+  }
+
+  .panel {
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--ssp-border);
+    box-shadow: none;
+  }
+
+  .ssp-splitter {
+    display: none;
+  }
+}

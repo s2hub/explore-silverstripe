@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Silverstripe Playground · Explore Silverstripe</title>
+    <meta name="description" content="Silverstripe CMS in your browser: the whole site and its code. No installation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Rubik:wght@400;500;600;700&display=swap">
+    <style>
+      html,
+      body,
+      #app {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // The full playground of the engine, with links back to the tutorials.
+      import { mountPlayground } from 'silverstripe-playground/app';
+
+      mountPlayground(document.querySelector('#app'), { home: './', tutorials: './' });
+    </script>
+  </body>
+</html>

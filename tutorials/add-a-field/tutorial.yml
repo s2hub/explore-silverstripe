@@ -1,0 +1,123 @@
+# A first tutorial: a new database field for the contacts, from the model to the CMS and the site.
+title: Add a field
+description: Give contacts a birthday and show it in the CMS list.
+order: 2
+duration: 10 min
+tags: [PHP]
+image: image.webp
+
+steps:
+  - title: Find the model
+    url: /admin/contacts
+    open:
+      - app/src/Contacts/Contact.php
+      - app/src/Contacts/ContactAdmin.php
+    text: |
+      The Contacts section in the CMS comes from one PHP class, `Contact`. Its `$db` list defines what is stored for
+      each contact.
+
+      Compare the fields in the code with the columns on the right.
+    tasks:
+      - label: Opened Contact.php
+        opened: app/src/Contacts/Contact.php
+      - label: Looked at ContactAdmin.php
+        opened: app/src/Contacts/ContactAdmin.php
+    hint: |
+      `ContactAdmin` puts the contacts into the CMS menu: its `$managed_models` lists `Contact`. The columns of the
+      list come from `$summary_fields` in `Contact.php`.
+
+  - title: Add a field
+    url: /admin/contacts
+    open:
+      - app/src/Contacts/Contact.php
+    text: |
+      Add a birthday to the `$db` list of `Contact`:
+
+      ```php
+      'Birthday' => 'Date',
+      ```
+
+      Save the file with **Save** or Ctrl+S. The CMS on the right shows an error then: the database has no column
+      for the field yet. The next step adds it.
+    tasks:
+      - label: Added Birthday to $db
+        contains:
+          file: app/src/Contacts/Contact.php
+          pattern: "\\$db\\s*=\\s*\\[[^\\]]*'Birthday'\\s*=>\\s*'Date'"
+    hint: |
+      Put the new line after `'Company' => 'Varchar',`, inside the square brackets. `Date` is one of Silverstripe's
+      field types; others are `Varchar`, `Text`, `Int`, `Boolean` and `Enum`.
+    solution:
+      files:
+        - file: app/src/Contacts/Contact.php
+          after: "'Company' => 'Varchar',"
+          insert: "\n        'Birthday' => 'Date',"
+
+  - title: Build the database
+    url: /admin/contacts
+    open:
+      - app/src/Contacts/Contact.php
+    text: |
+      The database does not know the new field yet. **dev/build** adds a column for it and clears the caches.
+
+      Then edit a contact in the CMS: the form has a **Birthday** field now. Silverstripe built it from the field type.
+    tasks:
+      - label: Ran dev/build
+        built: true
+      - label: Opened a contact in the CMS
+        visited: "/admin/contacts/.*/item/\\d+"
+    hint: |
+      **dev/build** is the button above the code. Its output appears below the code: look for `Birthday` in the list
+      of changed tables.
+    solution:
+      build: true
+
+  - title: Show it in the list
+    url: /admin/contacts
+    open:
+      - app/src/Contacts/Contact.php
+    text: |
+      The list of contacts shows the fields in `$summary_fields`. Add the birthday there too, save, and look at the
+      list on the right.
+    tasks:
+      - label: Added Birthday to $summary_fields
+        contains:
+          file: app/src/Contacts/Contact.php
+          pattern: "\\$summary_fields\\s*=\\s*\\[[^\\]]*'Birthday"
+    hint: |
+      The key is the field, the value the column's title: `'Birthday' => 'Birthday',`. Changes to `$summary_fields`
+      are configuration, not database: saving is enough, no dev/build needed.
+    solution:
+      files:
+        - file: app/src/Contacts/Contact.php
+          after: "'Email' => 'Email',"
+          insert: "\n        'Birthday' => 'Birthday',"
+
+  - title: Show it on the site
+    url: /contacts
+    open:
+      - app/templates/Layout/ContactPage.ss
+    text: |
+      Each contact has a page of its own, made from the template `ContactPage.ss`. Add the birthday below the phone
+      number:
+
+      ```html
+      <% if $Birthday %><dt>Birthday</dt><dd>$Birthday.Nice</dd><% end_if %>
+      ```
+
+      Then open a contact on the site.
+    tasks:
+      - label: Added $Birthday to the template
+        contains:
+          file: app/templates/Layout/ContactPage.ss
+          pattern: "\\$Birthday"
+      - label: Opened a contact's page
+        visited: "^/contact/\\d+"
+    hint: |
+      `$Birthday.Nice` formats the date for people. Give a contact a birthday in the CMS first, or the `<% if %>`
+      hides it. A contact's page is linked from the cards on the Contacts page.
+    solution:
+      files:
+        - file: app/templates/Layout/ContactPage.ss
+          after: "<dd><a href=\"tel:$Phone\">$Phone</a></dd><% end_if %>"
+          insert: "\n            <% if $Birthday %><dt>Birthday</dt><dd>$Birthday.Nice</dd><% end_if %>"
