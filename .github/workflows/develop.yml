@@ -1,0 +1,57 @@
+name: Deploy develop instance
+
+# Publishes the develop branch to https://develop.exploresilverstripe.com. GitHub Pages serves one site per repository,
+# so the build goes to the gh-pages branch of s2hub/explore-silverstripe-develop (a repository that holds nothing
+# else), pushed with a deploy key (secret DEVELOP_DEPLOY_KEY, the public half is a deploy key with write access
+# there). Engine and site bundle are the playground's main branch, as for the live site.
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: develop
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - run: npm install --no-audit --no-fund
+      - run: npm run bundle
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - run: npm run build
+
+      # No search engine indexing of the develop instance; no Jekyll (it would drop _resources/); the custom domain.
+      - run: |
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+          touch dist/.nojekyll
+          echo develop.exploresilverstripe.com > dist/CNAME
+
+      # One commit, replacing the branch: the history of the build output is of no use.
+      - name: Push to s2hub/explore-silverstripe-develop
+        env:
+          DEPLOY_KEY: ${{ secrets.DEVELOP_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new"
+          cd dist
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Build of ${GITHUB_SHA::7} (develop)"
+          git push -f git@github.com:s2hub/explore-silverstripe-develop.git gh-pages
