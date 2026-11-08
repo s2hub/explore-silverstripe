@@ -44,7 +44,14 @@ preview` serves it on port 5421.
 
 **Deploy:** `.github/workflows/pages.yml` publishes to GitHub Pages on every push to main, at
 https://exploresilverstripe.com (custom domain in Settings > Pages; DNS: the GitHub Pages A/AAAA records for the
-apex, `www` as CNAME to `s2hub.github.io`). There is no lock file
+apex, `www` as CNAME to `s2hub.github.io`).
+
+**Develop instance:** the `develop` branch is published to https://develop.exploresilverstripe.com by
+`.github/workflows/develop.yml`, through the `gh-pages` branch of
+[explore-silverstripe-develop](https://github.com/s2hub/explore-silverstripe-develop) (Pages serves one site per
+repository). It is kept out of search engines. Try changes there, then merge `develop` into `main`.
+
+There is no lock file
 (`.npmrc`): the engine and the bundle are always the latest of the playground's main branch, so they match. After a
 change of the playground, run the workflow again (Actions > Deploy Explore Silverstripe > Run workflow).
 
